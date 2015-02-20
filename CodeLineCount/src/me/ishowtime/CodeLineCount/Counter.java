@@ -12,6 +12,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by iShowTime on 15/2/8.
@@ -39,9 +41,8 @@ public class Counter implements Callable<Integer> {
         {
             int lineCount = 0;
             while(in.hasNextLine()) {
-                //TODO 正则表达式去掉注释的行
                 String line = in.nextLine().trim();
-                if (line.length() > 0) {
+                if (line.length() > 0 && !isCommentLine(line)) {
                     lineCount++;
                 }
             }
@@ -50,7 +51,25 @@ public class Counter implements Callable<Integer> {
     }
 
     /**
-     * 判断文件类型是否符合要求
+     * 判断输入行是否是注释行
+     * @param line
+     * @return  如果是注释行返回true
+     */
+    private static final boolean isCommentLine(String line) {
+        //以/ * ＃开头的行都认为是注释行
+        String regex = "^[/#*]";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(line);
+//        if (matcher.find()) {
+//            System.out.println("++++++++++++");
+//            System.out.println(matcher.start());
+//            System.out.println(matcher.end());
+//        }
+        //lookingAt只需要部分匹配即可，使用matches则需要全部匹配，正则也必须是^[/#*].*]
+        return matcher.lookingAt();
+    }
+    /**
+     * 判断文件类型是否符合输入要求
      * @param file
      * @return
      */
