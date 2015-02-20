@@ -35,6 +35,7 @@ public class CodeLineCount {
             System.out.println("File is not found");
             System.exit(-1);
         }
+        //TODO BUGFIX 单个文件，扩展名不符合要求，则直接返回文件类型错误
         //向线程池提交任务
         ExecutorService pool = Executors.newCachedThreadPool();
         Counter counter = new Counter(new File(filePath),pool,fileTypes);
