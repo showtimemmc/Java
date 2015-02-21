@@ -1,5 +1,7 @@
 package me.ishowtime.CodeLineCount;
 
+import me.ishowtime.helper.FileHelper;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -35,7 +37,11 @@ public class CodeLineCount {
             System.out.println("File is not found");
             System.exit(-1);
         }
-        //TODO BUGFIX 单个文件，扩展名不符合要求，则直接返回文件类型错误
+        //如果输入文件的文件类型错误，则直接返回
+        if (!fileTypes.contains(FileHelper.getExtentionName(file))) {
+            System.out.println("File Type is wrong");
+            System.exit(-1);
+        }
         //向线程池提交任务
         ExecutorService pool = Executors.newCachedThreadPool();
         Counter counter = new Counter(new File(filePath),pool,fileTypes);
